@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>History Challenge: Misi Menaklukkan Ujian Sejarah!</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: linear-gradient(145deg, #1e2b2f 0%, #2c3e4b 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .app-container {
+      max-width: 950px;
+      width: 100%;
+      background: #fdf8ed;
+      border-radius: 48px 48px 32px 32px;
+      box-shadow: 0 30px 40px rgba(0, 0, 0, 0.6), 0 0 0 2px #d9c5a7 inset;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    /* HEADER / HERO */
+    .hero {
+      background: #1b3b4b;
+      background-image: radial-gradient(circle at 20% 30%, #3e6a7a 0%, #0f2a33 90%);
+      padding: 28px 24px 20px;
+      text-align: center;
+      color: #f9e7c5;
+      border-bottom: 8px solid #b38b5b;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      letter-spacing: 4px;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-shadow: 5px 5px 0 #0a1a1f, 0 2px 20px #edc285;
+      margin-bottom: 4px;
+      line-height: 1.1;
+      word-break: break-word;
+    }
+
+    .hero .subhead {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #f5d79e;
+      text-shadow: 2px 2px 0 #0a1a1f;
+      background: rgba(0, 0, 0, 0.3);
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 60px;
+      margin-top: 8px;
+      backdrop-filter: blur(4px);
+      border: 1px solid #b38b5b;
+    }
+
+    .hero .tagline {
+      margin: 16px 0 8px;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: #e6d3b5;
+    }
+
+    .btn-start {
+      background: #e6b422;
+      border: none;
+      font-size: 1.7rem;
+      font-weight: bold;
+      padding: 16px 48px;
+      border-radius: 60px;
+      color: #1e2b2f;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      box-shadow: 0 10px 0 #a07d2b, 0 12px 20px black;
+      cursor: pointer;
+      transition: 0.1s linear;
+      margin: 12px 0 6px;
+      border: 2px solid #fff1c1;
+    }
+
+    .btn-start:active {
+      transform: translateY(6px);
+      box-shadow: 0 4px 0 #a07d2b, 0 8px 16px black;
+    }
+
+    .btn-start:hover {
+      background: #f5c542;
+    }
+
+    /* LEVEL SELECT */
+    .level-select {
+      display: none;
+      padding: 24px 20px 30px;
+      background: #f3eadb;
+      border-bottom: 6px solid #b38b5b;
+    }
+
+    .level-select h2 {
+      text-align: center;
+      font-size: 2.2rem;
+      color: #1e3a4b;
+      margin-bottom: 24px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 0 #e6cfb0;
+    }
+
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+    }
+
+    .level-card {
+      background: #1b3b4b;
+      color: #f9e7c5;
+      border-radius: 24px;
+      padding: 20px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.15s;
+      border: 3px solid #b38b5b;
+      box-shadow: 0 6px 0 #0d222b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .level-card:hover {
+      background: #2a566a;
+      transform: scale(1.02);
+      border-color: #e6b422;
+    }
+
+    .level-card .icon {
+      font-size: 2.5rem;
+      margin-bottom: 6px;
+    }
+
+    .level-card .level-name {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .level-card .level-desc {
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    /* QUIZ AREA */
+    .quiz-panel {
+      display: none;
+      background: #fffaf0;
+      padding: 24px 20px 32px;
+      border-radius: 0 0 32px 32px;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .level-badge {
+      background: #1e3a4b;
+      color: #f0d59b;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+    }
+
+    .score-box {
+      background: #e6b422;
+      color: #1e2b2f;
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-weight: 800;
+      font-size: 1.3rem;
+      box-shadow: 0 3px 0 #a07d2b;
+    }
+
+    .progress-bar {
+      height: 14px;
+      background: #d9cfbc;
+      border-radius: 20px;
+      margin: 12px 0 20px;
+      overflow: hidden;
+      border: 1px solid #b38b5b;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #e6b422;
+      border-radius: 20px;
+      transition: width 0.3s;
+    }
+
+    .question-text {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #1e2b2f;
+      background: #f3eadb;
+      padding: 20px;
+      border-radius: 24px;
+      border-left: 12px solid #b38b5b;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .option-btn {
+      background: #ffffff;
+      border: 2px solid #b38b5b;
+      padding: 14px 20px;
+      border-radius: 40px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      transition: 0.1s;
+      color: #1e2b2f;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 3px 0 #c9b69b;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background: #f5e6d3;
+      border-color: #e6b422;
+    }
+
+    .option-btn.selected {
+      background: #b38b5b;
+      color: white;
+      border-color: #5a3e28;
+      box-shadow: 0 3px 0 #5a3e28;
+    }
+
+    .option-btn.correct {
+      background: #2e7d32;
+      color: white;
+      border-color: #1b4b1e;
+      box-shadow: 0 3px 0 #1b4b1e;
+    }
+
+    .option-btn.wrong {
+      background: #b33a3a;
+      color: white;
+      border-color: #7a1f1f;
+      box-shadow: 0 3px 0 #7a1f1f;
+    }
+
+    .option-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.9;
+    }
+
+    .feedback-box {
+      background: #e9dbc9;
+      padding: 18px 22px;
+      border-radius: 20px;
+      margin: 16px 0;
+      font-size: 1rem;
+      border-left: 8px solid #e6b422;
+      color: #1e2b2f;
+      display: none;
+    }
+
+    .feedback-box.show {
+      display: block;
+    }
+
+    .btn-next {
+      background: #1e3a4b;
+      color: white;
+      border: none;
+      font-size: 1.4rem;
+      font-weight: 700;
+      padding: 14px 38px;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #0d1f26;
+      transition: 0.1s;
+      margin-top: 8px;
+      width: 100%;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .btn-next:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #0d1f26;
+    }
+
+    .btn-next:disabled {
+      background: #7a8f99;
+      box-shadow: 0 4px 0 #4d5f68;
+      cursor: not-allowed;
+    }
+
+    /* Hasil akhir */
+    .result-panel {
+      display: none;
+      background: #f3eadb;
+      padding: 32px 24px;
+      text-align: center;
+      border-radius: 0 0 32px 32px;
+    }
+
+    .result-panel h2 {
+      font-size: 2.2rem;
+      color: #1e3a4b;
+      margin-bottom: 20px;
+    }
+
+    .result-stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 18px;
+      margin: 24px 0;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 16px 24px;
+      border-radius: 28px;
+      box-shadow: 0 6px 0 #c9b69b;
+      min-width: 140px;
+    }
+
+    .stat-card .label {
+      font-size: 0.9rem;
+      color: #5a4d3c;
+    }
+
+    .stat-card .value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #1e3a4b;
+    }
+
+    .predikat {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: #e6b422;
+      display: inline-block;
+      padding: 12px 36px;
+      border-radius: 60px;
+      color: #1e2b2f;
+      margin: 16px 0;
+      box-shadow: 0 6px 0 #a07d2b;
+    }
+
+    .btn-ulangi {
+      background: #1e3a4b;
+      color: white;
+      border: none;
+      font-size: 1.3rem;
+      padding: 14px 40px;
+      border-radius: 60px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #0d1f26;
+      margin-top: 28px;
+    }
+
+    /* TTS sederhana grid */
+    .tts-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin: 20px 0;
+    }
+
+    .tts-cell {
+      aspect-ratio: 1/1;
+      background: white;
+      border: 2px solid #b38b5b;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .tts-input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      outline: none;
+    }
+
+    .tts-input:focus {
+      background: #fff1c1;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Responsif */
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero .subhead {
+        font-size: 1rem;
+      }
+
+      .btn-start {
+        font-size: 1.3rem;
+        padding: 12px 24px;
+      }
+
+      .question-text {
+        font-size: 1.1rem;
+      }
+
+      .option-btn {
+        font-size: 0.95rem;
+        padding: 12px 16px;
+      }
+
+      .level-card .level-name {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container" id="app">
+    <!-- HERO / PEMBUKA -->
+    <div class="hero" id="hero">
+      <h1>HISTORY CHALLENGE</h1>
+      <div class="subhead">Misi Menaklukkan Ujian Sejarah Indonesia!</div>
+      <div class="tagline">Jelajahi masa kolonial, pecahkan misteri perjuangan, dan temukan jejak lahirnya nasionalisme Indonesia.</div>
+      <button class="btn-start" id="btnMulai">MULAI PETUALANGAN</button>
+    </div>
+
+    <!-- PILIH LEVEL -->
+    <div class="level-select" id="levelSelect">
+      <h2>Pilih tantanganmu!</h2>
+      <div class="level-grid" id="levelGrid">
+        <!-- diisi via JS -->
+      </div>
+    </div>
+
+    <!-- QUIZ PANEL (dinamis) -->
+    <div class="quiz-panel" id="quizPanel">
+      <div class="quiz-header">
+        <div class="level-badge" id="levelBadge">LEVEL 1</div>
+        <div class="score-box" id="scoreDisplay">0</div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div id="dynamicQuizContent"></div>
+    </div>
+
+    <!-- RESULT PANEL -->
+    <div class="result-panel" id="resultPanel">
+      <h2>Misi Selesai!</h2>
+      <div id="resultStats"></div>
+      <button class="btn-ulangi" id="btnUlangi">ULANGI PERMAINAN</button>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ============== DATA SOAL ==============
+      // LEVEL 1: PG 15 soal
+      const level1Questions = [
+        { q: "Organisasi dagang Belanda yang didirikan pada 1602 dan memonopoli perdagangan rempah-rempah adalah...", options: ["EIC", "VOC", "GICP", "OIC", "Dutch Trading Co."], correct: 1, explanation: "VOC (Vereenigde Oostindische Compagnie) didirikan 20 Maret 1602." },
+        { q: "Perlawanan Sultan Agung terhadap Belanda terjadi pada tahun...", options: ["1628 dan 1629", "1613 dan 1614", "1641 dan 1642", "1670 dan 1671", "1602 dan 1603"], correct: 0, explanation: "Sultan Agung menyerang Batavia dua kali pada 1628 dan 1629." },
+        { q: "Tokoh yang memimpin perlawanan rakyat Maluku terhadap Belanda pada 1817 adalah...", options: ["Sultan Hasanuddin", "Pattimura", "Imam Bonjol", "Pangeran Diponegoro", "Sultan Agung"], correct: 1, explanation: "Kapitan Pattimura memimpin perlawanan rakyat Maluku tahun 1817." },
+        { q: "Politik Etis yang diterapkan Belanda pada awal abad ke-20 bertujuan...", options: ["Mengeksploitasi kekayaan alam", "Membalas budi kepada rakyat Indonesia", "Memperkuat kekuasaan kolonial", "Mengembangkan pendidikan modern", "Meningkatkan kesejahteraan rakyat pribumi"], correct: 4, explanation: "Politik Etis (Trias Politika) bertujuan meningkatkan kesejahteraan rakyat pribumi." },
+        { q: "Organisasi pergerakan nasional pertama yang didirikan pada 20 Mei 1908 adalah...", options: ["Sarekat Islam", "Budi Utomo", "Indische Partij", "Muhammadiyah", "PNI"], correct: 1, explanation: "Budi Utomo didirikan 20 Mei 1908, diperingati sebagai Hari Kebangkitan Nasional." },
+        { q: "Sumpah Pemuda diikrarkan pada tanggal...", options: ["28 Oktober 1928", "17 Agustus 1945", "20 Mei 1908", "1 Juni 1945", "10 November 1945"], correct: 0, explanation: "Sumpah Pemuda diikrarkan pada 28 Oktober 1928." },
+        { q: "Perlawanan Pangeran Diponegoro terhadap Belanda terjadi pada periode...", options: ["1825–1830", "1803–1808", "1873–1914", "1901–1910", "1817–1820"], correct: 0, explanation: "Perang Diponegoro berlangsung 1825–1830." },
+        { q: "Organisasi Indische Partij didirikan oleh...", options: ["Soekarno, Hatta, Sjahrir", "Douwes Dekker, Tjipto Mangoenkoesoemo, Ki Hajar Dewantara", "Kartini, Dewi Sartika, R.A. Kartini", "H.O.S. Tjokroaminoto", "Semaun, Darsono, Tan Malaka"], correct: 1, explanation: "Indische Partij didirikan oleh Douwes Dekker, Tjipto, dan Ki Hajar Dewantara pada 1912." },
+        { q: "Perang Padri di Sumatera Barat dipicu oleh...", options: ["Perselisihan adat dengan kaum Padri", "Pemberontakan petani", "Pajak yang tinggi", "Perebutan kekuasaan raja", "Konflik dagang lada"], correct: 0, explanation: "Perang Padri berawal dari konflik antara kaum adat dan kaum Padri (Islam)." },
+        { q: "Tokoh yang dijuluki 'Ayam Jantan dari Timur' adalah...", options: ["Pattimura", "Sultan Hasanuddin", "Sultan Agung", "Pangeran Diponegoro", "Imam Bonjol"], correct: 1, explanation: "Sultan Hasanuddin dijuluki Ayam Jantan dari Timur." },
+        { q: "VOC diberikan hak istimewa oleh pemerintah Belanda, salah satunya...", options: ["Hak monopoli perdagangan", "Hak memiliki tentara sendiri", "Hak mencetak uang", "Hak mengatur pemerintahan", "Semua benar"], correct: 4, explanation: "VOC memiliki hak monopoli, tentara, mencetak uang, dan mengatur pemerintahan (octrooi)." },
+        { q: "Buku 'Max Havelaar' yang mengkritik kebijakan tanam paksa ditulis oleh...", options: ["Multatuli", "R.A. Kartini", "Soekarno", "H.J. van den Bosch", "Douwes Dekker"], correct: 0, explanation: "Multatuli (Eduard Douwes Dekker) menulis Max Havelaar." },
+        { q: "Pemberontakan petani di Banten pada 1888 dipicu oleh...", options: ["Kebijakan tanam paksa", "Penindasan kolonial dan pajak", "Pengaruh gerakan Islam", "Perang Diponegoro", "Politik Etis"], correct: 1, explanation: "Pemberontakan petani Banten 1888 dipicu penindasan dan pajak yang memberatkan." },
+        { q: "Partai Nasional Indonesia (PNI) didirikan pada tahun...", options: ["1927", "1928", "1908", "1912", "1920"], correct: 0, explanation: "PNI didirikan 4 Juli 1927 oleh Soekarno dkk." },
+        { q: "Restorasi Meiji di Jepang menjadi inspirasi pergerakan nasional Indonesia karena...", options: ["Keberhasilan modernisasi tanpa kehilangan identitas", "Jepang menjajah Indonesia", "Jepang membantu perjuangan Indonesia", "Jepang mengalahkan Belanda", "Jepang memberi bantuan senjata"], correct: 0, explanation: "Restorasi Meiji menunjukkan modernisasi cepat Jepang yang menginspirasi kaum terpelajar." }
+      ];
+
+      // LEVEL 2: Benar/Salah 10 soal
+      const level2Questions = [
+        { q: "VOC didirikan pada tahun 1602 dengan tujuan memonopoli perdagangan rempah-rempah di Nusantara.", correct: true, explanation: "VOC didirikan 20 Maret 1602 untuk monopoli perdagangan." },
+        { q: "Perang Diponegoro berakhir dengan kemenangan Pangeran Diponegoro.", correct: false, explanation: "Perang Diponegoro berakhir dengan kekalahan Diponegoro dan penangkapan pada 1830." },
+        { q: "Politik Etis bertujuan untuk meningkatkan kesejahteraan rakyat pribumi melalui pendidikan, irigasi, dan emigrasi.", correct: true, explanation: "Politik Etis mencakup edukasi, irigasi, dan emigrasi." },
+        { q: "Sumpah Pemuda 1928 menekankan pentingnya persatuan dan kesatuan bangsa Indonesia.", correct: true, explanation: "Sumpah Pemuda menegaskan satu tanah air, satu bangsa, satu bahasa." },
+        { q: "Sultan Hasanuddin dari Gowa berhasil mengalahkan VOC dalam Perang Makassar.", correct: false, explanation: "Sultan Hasanuddin akhirnya kalah dan menandatangani Perjanjian Bongaya 1667." },
+        { q: "Budi Utomo adalah organisasi pergerakan nasional pertama yang bersifat politik praktis.", correct: false, explanation: "Budi Utomo awalnya bersifat sosial-budaya, bukan politik praktis." },
+        { q: "Pattimura memimpin perlawanan terhadap Belanda di Maluku pada tahun 1817.", correct: true, explanation: "Pattimura memimpin perlawanan rakyat Maluku tahun 1817." },
+        { q: "Indische Partij merupakan organisasi pertama yang secara terang-terangan menuntut kemerdekaan Indonesia.", correct: true, explanation: "Indische Partij (1912) menuntut kemerdekaan Hindia." },
+        { q: "Perang Aceh berlangsung singkat karena Belanda mudah menaklukkan Aceh.", correct: false, explanation: "Perang Aceh berlangsung lama (1873–1914) dan sangat sengit." },
+        { q: "Pengaruh Revolusi Tiongkok (1911) turut membangkitkan semangat nasionalisme di Asia, termasuk Indonesia.", correct: true, explanation: "Revolusi Tiongkok menginspirasi gerakan nasionalis di Asia." }
+      ];
+
+      // LEVEL 3: PG Kompleks 10 soal (indeks jawaban benar 0-based)
+      const level3Questions = [
+        { q: "Manakah pernyataan yang benar tentang VOC? (Pilih semua yang benar)", options: ["Didirikan tahun 1602", "Memiliki hak monopoli", "Berpusat di Batavia", "Dipimpin oleh Gubernur Jenderal", "Dibubarkan tahun 1799"], correct: [0,1,2,3,4], explanation: "Semua pernyataan benar tentang VOC." },
+        { q: "Faktor pendorong perlawanan rakyat Indonesia terhadap kolonialisme adalah...", options: ["Penindasan dan eksploitasi", "Kebijakan pajak yang memberatkan", "Politik devide et impera", "Monopoli perdagangan", "Pemberian kemerdekaan"], correct: [0,1,2,3], explanation: "Kemerdekaan tidak diberikan, justru dituntut." },
+        { q: "Organisasi pergerakan nasional yang didirikan sebelum tahun 1920 adalah...", options: ["Budi Utomo", "Sarekat Islam", "Indische Partij", "Muhammadiyah", "PNI"], correct: [0,1,2,3], explanation: "PNI didirikan 1927." },
+        { q: "Dampak penjajahan Belanda di bidang ekonomi adalah...", options: ["Eksploitasi sumber daya alam", "Tanam paksa", "Monopoli perdagangan", "Pembangunan infrastruktur untuk kepentingan kolonial", "Kesejahteraan rakyat meningkat pesat"], correct: [0,1,2,3], explanation: "Kesejahteraan rakyat tidak meningkat pesat, justru dieksploitasi." },
+        { q: "Tokoh-tokoh yang terlibat dalam Indische Partij adalah...", options: ["Douwes Dekker", "Tjipto Mangoenkoesoemo", "Ki Hajar Dewantara", "Soekarno", "Hatta"], correct: [0,1,2], explanation: "Soekarno dan Hatta bukan anggota Indische Partij." },
+        { q: "Perlawanan terhadap Portugis di Maluku dilakukan oleh...", options: ["Sultan Ternate", "Sultan Tidore", "Pattimura", "Sultan Hasanuddin", "Sultan Agung"], correct: [0,1], explanation: "Sultan Ternate dan Tidore memimpin perlawanan terhadap Portugis." },
+        { q: "Kebijakan kolonial Belanda yang menimbulkan penderitaan rakyat adalah...", options: ["Tanam paksa", "Kerja rodi", "Monopoli dagang", "Politik Etis", "Pajak tinggi"], correct: [0,1,2,4], explanation: "Politik Etis bertujuan memperbaiki, meski pelaksanaannya belum optimal." },
+        { q: "Pernyataan yang benar tentang Perang Padri adalah...", options: ["Terjadi di Sumatera Barat", "Dipicu konflik adat dan agama", "Melibatkan Imam Bonjol", "Berakhir dengan kekalahan kaum Padri", "Terjadi pada 1825-1830"], correct: [0,1,2,3], explanation: "Perang Padri berlangsung 1803-1838, bukan 1825-1830." },
+        { q: "Faktor yang menyebabkan perlawanan rakyat gagal adalah...", options: ["Perlawanan bersifat kedaerahan", "Kurangnya persatuan", "Senjata lebih modern pihak kolonial", "Politik devide et impera", "Dukungan rakyat yang penuh"], correct: [0,1,2,3], explanation: "Dukungan rakyat justru kuat, tetapi faktor lain menyebabkan kegagalan." },
+        { q: "Organisasi yang lahir pada masa pergerakan nasional dan masih ada hingga kini adalah...", options: ["Muhammadiyah", "Nahdlatul Ulama", "Budi Utomo", "Sarekat Islam", "PNI"], correct: [0,1], explanation: "Muhammadiyah dan NU masih eksis hingga kini." }
+      ];
+
+      // LEVEL 4: TTS sederhana (5 mendatar + 5 menurun => 10 istilah)
+      // Untuk kesederhanaan, kita buat TTS mini dengan grid 5x5 dan beberapa istilah
+      const level4Data = {
+        // Mendatar: VOC(1), DIPONEGORO(2), PATTIMURA(3), BUDIUTOMO(4), SUMPAHPEMUDA(5) -> disesuaikan panjang
+        // Kita buat sederhana: daftar istilah dan petunjuk, tanpa grid kompleks (karena keterbatasan)
+        across: [
+          { clue: "1. Kongsi dagang Belanda (singkatan)", answer: "VOC" },
+          { clue: "2. Pahlawan dari Maluku yang memimpin perlawanan 1817", answer: "PATTIMURA" },
+          { clue: "3. Organisasi pertama 1908", answer: "BUDIUTOMO" },
+          { clue: "4. Ikrar pemuda 1928", answer: "SUMPAHPEMUDA" },
+          { clue: "5. Perang di Sumatera Barat (1803-1838)", answer: "PERANGPADRI" }
+        ],
+        down: [
+          { clue: "1. Pahlawan dari Makassar, Ayam Jantan dari Timur", answer: "HASANUDDIN" },
+          { clue: "2. Pangeran yang memimpin Perang Jawa 1825-1830", answer: "DIPONEGORO" },
+          { clue: "3. Partai yang didirikan Soekarno 1927", answer: "PNI" },
+          { clue: "4. Tokoh Indische Partij (nama lain Multatuli)", answer: "DOUWESDEKKER" },
+          { clue: "5. Sistem tanam paksa", answer: "CULTUURSTELSEL" }
+        ]
+      };
+
+      // LEVEL 5: History Detective 5 soal (analisis)
+      const level5Questions = [
+        { q: "Bacalah kutipan berikut: 'Jangan pernah menyerah, karena tanah air kita adalah harta yang paling berharga.' – Sultan Hasanuddin. Kesimpulan yang tepat tentang sikap Sultan Hasanuddin adalah...", options: ["Rela berkorban untuk kemerdekaan", "Takut menghadapi Belanda", "Ingin bekerja sama dengan Belanda", "Tidak peduli pada rakyat", "Mementingkan diri sendiri"], correct: 0, explanation: "Kutipan menunjukkan semangat pantang menyerah dan rela berkorban." },
+        { q: "Perhatikan kronologi: 1602 VOC berdiri → 1619 Batavia didirikan → 1628-1629 Sultan Agung menyerang Batavia. Analisis yang tepat adalah...", options: ["Sultan Agung bereaksi atas kekuasaan VOC di Batavia", "VOC membantu Sultan Agung", "Batavia didirikan oleh Sultan Agung", "Sultan Agung bekerja sama dengan VOC", "Serangan tidak berkaitan dengan VOC"], correct: 0, explanation: "Serangan Sultan Agung merupakan reaksi terhadap kekuasaan VOC di Batavia." },
+        { q: "Dari data: Perlawanan Diponegoro (1825-1830), Perang Padri (1803-1838), Perang Aceh (1873-1914). Kesimpulan yang tepat tentang perlawanan rakyat adalah...", options: ["Bersifat sporadis dan kedaerahan", "Terorganisir secara nasional", "Selalu berhasil", "Didukung Belanda", "Berlangsung singkat"], correct: 0, explanation: "Perlawanan bersifat kedaerahan dan belum terorganisir nasional." },
+        { q: "Politik Etis digagas oleh... dan bertujuan...", options: ["Van Deventer, meningkatkan kesejahteraan rakyat", "Van den Bosch, tanam paksa", "Daendels, kerja rodi", "Raffles, sewa tanah", "Multatuli, kritik kolonial"], correct: 0, explanation: "Politik Etis digagas Van Deventer untuk kesejahteraan rakyat." },
+        { q: "Sumpah Pemuda 1928 merupakan momentum penting karena...", options: ["Menegaskan persatuan seluruh pemuda Indonesia", "Menyatukan organisasi politik", "Membentuk tentara nasional", "Mendirikan PNI", "Menuntut kemerdekaan langsung"], correct: 0, explanation: "Sumpah Pemuda menegaskan persatuan pemuda dari berbagai daerah." }
+      ];
+
+      // ============== STATE ==============
+      let currentLevel = 0; // 1-5
+      let currentQuestionIndex = 0;
+      let score = 0;
+      let answered = false;
+      let selectedOptions = []; // untuk level 3 (array indeks)
+      let ttsAnswers = {}; // untuk level 4
+
+      // elemen DOM
+      const hero = document.getElementById('hero');
+      const levelSelect = document.getElementById('levelSelect');
+      const quizPanel = document.getElementById('quizPanel');
+      const resultPanel = document.getElementById('resultPanel');
+      const levelGrid = document.getElementById('levelGrid');
+      const dynamicQuizContent = document.getElementById('dynamicQuizContent');
+      const levelBadge = document.getElementById('levelBadge');
+      const scoreDisplay = document.getElementById('scoreDisplay');
+      const progressFill = document.getElementById('progressFill');
+      const btnMulai = document.getElementById('btnMulai');
+      const btnUlangi = document.getElementById('btnUlangi');
+
+      // ============== FUNCTIONS ==============
+      function showLevelSelect() {
+        hero.style.display = 'none';
+        levelSelect.style.display = 'block';
+        quizPanel.style.display = 'none';
+        resultPanel.style.display = 'none';
+      }
+
+      function startLevel(level) {
+        currentLevel = level;
+        currentQuestionIndex = 0;
+        score = 0;
+        answered = false;
+        selectedOptions = [];
+        ttsAnswers = {};
+        levelSelect.style.display = 'none';
+        quizPanel.style.display = 'block';
+        resultPanel.style.display = 'none';
+        updateScoreAndProgress();
+        renderQuestion();
+      }
+
+      function updateScoreAndProgress() {
+        scoreDisplay.textContent = score;
+        let totalQ = 0;
+        if (currentLevel === 1) totalQ = level1Questions.length;
+        else if (currentLevel === 2) totalQ = level2Questions.length;
+        else if (currentLevel === 3) totalQ = level3Questions.length;
+        else if (currentLevel === 4) totalQ = 10; // 10 istilah
+        else if (currentLevel === 5) totalQ = level5Questions.length;
+        else totalQ = 1;
+        let progress = totalQ > 0 ? (currentQuestionIndex / totalQ) * 100 : 0;
+        progressFill.style.width = Math.min(progress, 100) + '%';
+      }
+
+      function renderQuestion() {
+        if (currentLevel === 1) renderLevel1();
+        else if (currentLevel === 2) renderLevel2();
+        else if (currentLevel === 3) renderLevel3();
+        else if (currentLevel === 4) renderLevel4();
+        else if (currentLevel === 5) renderLevel5();
+      }
+
+      // LEVEL 1
+      function renderLevel1() {
+        const qData = level1Questions[currentQuestionIndex];
+        levelBadge.textContent = `LEVEL 1 · QUICK HISTORY`;
+        let html = `<div class="question-text">${qData.q}</div><div class="options-container" id="optionsContainer">`;
+        qData.options.forEach((opt, idx) => {
+          html += `<button class="option-btn" data-index="${idx}">${String.fromCharCode(65+idx)}. ${opt}</button>`;
+        });
+        html += `</div><div class="feedback-box" id="feedbackBox"></div>`;
+        html += `<button class="btn-next" id="btnNext" disabled>SOAL BERIKUTNYA</button>`;
+        dynamicQuizContent.innerHTML = html;
+
+        const optionBtns = document.querySelectorAll('.option-btn');
+        optionBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (answered) return;
+            answered = true;
+            const selectedIdx = parseInt(btn.dataset.index);
+            const isCorrect = selectedIdx === qData.correct;
+            if (isCorrect) { score += 10; btn.classList.add('correct'); }
+            else { btn.classList.add('wrong'); }
+            // tandai jawaban benar
+            optionBtns[qData.correct].classList.add('correct');
+            optionBtns.forEach(b => b.disabled = true);
+            const fb = document.getElementById('feedbackBox');
+            fb.textContent = (isCorrect ? '✅ Benar! ' : '❌ Salah. ') + qData.explanation;
+            fb.classList.add('show');
+            document.getElementById('btnNext').disabled = false;
+            updateScoreAndProgress();
+          });
+        });
+        document.getElementById('btnNext').addEventListener('click', () => {
+          if (currentQuestionIndex < level1Questions.length - 1) {
+            currentQuestionIndex++;
+            answered = false;
+            renderQuestion();
+            updateScoreAndProgress();
+          } else {
+            finishLevel();
+          }
+        });
+      }
+
+      // LEVEL 2
+      function renderLevel2() {
+        const qData = level2Questions[currentQuestionIndex];
+        levelBadge.textContent = `LEVEL 2 · TRUE OR FALSE`;
+        let html = `<div class="question-text">${qData.q}</div>
+          <div class="options-container" id="optionsContainer">
+            <button class="option-btn" data-val="true">✅ BENAR</button>
+            <button class="option-btn" data-val="false">❌ SALAH</button>
+          </div>
+          <div class="feedback-box" id="feedbackBox"></div>
+          <button class="btn-next" id="btnNext" disabled>SOAL BERIKUTNYA</button>`;
+        dynamicQuizContent.innerHTML = html;
+
+        const btns = document.querySelectorAll('.option-btn');
+        btns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (answered) return;
+            answered = true;
+            const val = btn.dataset.val === 'true';
+            const isCorrect = val === qData.correct;
+            if (isCorrect) { score += 10; btn.classList.add('correct'); }
+            else { btn.classList.add('wrong'); }
+            btns.forEach(b => {
+              b.disabled = true;
+              if (b.dataset.val === String(qData.correct)) b.classList.add('correct');
+            });
+            const fb = document.getElementById('feedbackBox');
+            fb.textContent = (isCorrect ? '✅ Benar! ' : '❌ Salah. ') + qData.explanation;
+            fb.classList.add('show');
+            document.getElementById('btnNext').disabled = false;
+            updateScoreAndProgress();
+          });
+        });
+        document.getElementById('btnNext').addEventListener('click', () => {
+          if (currentQuestionIndex < level2Questions.length - 1) {
+            currentQuestionIndex++;
+            answered = false;
+            renderQuestion();
+            updateScoreAndProgress();
+          } else finishLevel();
+        });
+      }
+
+      // LEVEL 3
+      function renderLevel3() {
+        const qData = level3Questions[currentQuestionIndex];
+        levelBadge.textContent = `LEVEL 3 · MULTIPLE ANSWER`;
+        let html = `<div class="question-text">${qData.q}</div><div class="options-container" id="optionsContainer">`;
+        qData.options.forEach((opt, idx) => {
+          html += `<button class="option-btn" data-index="${idx}">${String.fromCharCode(65+idx)}. ${opt}</button>`;
+        });
+        html += `</div><div class="feedback-box" id="feedbackBox"></div>`;
+        html += `<button class="btn-next" id="btnNext" disabled>SUBMIT & LANJUT</button>`;
+        dynamicQuizContent.innerHTML = html;
+
+        const optionBtns = document.querySelectorAll('.option-btn');
+        const selected = new Set();
+        optionBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (answered) return;
+            const idx = parseInt(btn.dataset.index);
+            if (selected.has(idx)) {
+              selected.delete(idx);
+              btn.classList.remove('selected');
+            } else {
+              selected.add(idx);
+              btn.classList.add('selected');
+            }
+          });
+        });
+        document.getElementById('btnNext').addEventListener('click', () => {
+          if (answered) return;
+          answered = true;
+          const correctSet = new Set(qData.correct);
+          let isCorrect = true;
+          // cek semua jawaban benar harus dipilih dan tidak ada yang salah
+          for (let i = 0; i < qData.options.length; i++) {
+            const shouldBeSelected = correctSet.has(i);
+            const isSelected = selected.has(i);
+            if (shouldBeSelected !== isSelected) isCorrect = false;
+            if (shouldBeSelected && isSelected) optionBtns[i].classList.add('correct');
+            if (!shouldBeSelected && isSelected) optionBtns[i].classList.add('wrong');
+            if (shouldBeSelected && !isSelected) optionBtns[i].classList.add('correct'); // tetap tandai yg benar
+          }
+          // tandai semua benar
+          qData.correct.forEach(i => optionBtns[i].classList.add('correct'));
+          if (isCorrect) score += 15;
+          optionBtns.forEach(b => b.disabled = true);
+          const fb = document.getElementById('feedbackBox');
+          fb.textContent = (isCorrect ? '✅ Benar! ' : '❌ Kurang tepat. ') + qData.explanation + ' (Jawaban benar: ' + qData.correct.map(i => String.fromCharCode(65+i)).join(', ') + ')';
+          fb.classList.add('show');
+          document.getElementById('btnNext').disabled = false;
+          updateScoreAndProgress();
+          // Ganti event listener agar bisa lanjut
+          const btnNext = document.getElementById('btnNext');
+          btnNext.textContent = 'SOAL BERIKUTNYA';
+          btnNext.addEventListener('click', () => {
+            if (currentQuestionIndex < level3Questions.length - 1) {
+              currentQuestionIndex++;
+              answered = false;
+              selected.clear();
+              renderQuestion();
+              updateScoreAndProgress();
+            } else finishLevel();
+          }, { once: true });
+        }, { once: true });
+      }
+
+      // LEVEL 4: TTS sederhana (daftar istilah + input)
+      function renderLevel4() {
+        levelBadge.textContent = `LEVEL 4 · CROSSWORD HISTORY`;
+        let html = `<div class="question-text">Isilah istilah sejarah berikut (ketik jawaban, tanpa spasi, huruf besar):</div>`;
+        html += `<div style="display:grid; gap:12px; margin-bottom:20px;">`;
+        // gabung mendatar dan menurun
+        const allClues = [...level4Data.across, ...level4Data.down];
+        allClues.forEach((item, idx) => {
+          html += `<div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <label style="min-width:300px; font-weight:500;">${item.clue}</label>
+            <input class="tts-input" data-answer="${item.answer}" style="width:200px; padding:8px; border:2px solid #b38b5b; border-radius:20px;" placeholder="Jawaban">
+          </div>`;
+        });
+        html += `</div><div class="feedback-box" id="feedbackBox"></div>`;
+        html += `<button class="btn-next" id="btnNext">CEK JAWABAN</button>`;
+        dynamicQuizContent.innerHTML = html;
+
+        document.getElementById('btnNext').addEventListener('click', () => {
+          if (answered) return;
+          answered = true;
+          const inputs = document.querySelectorAll('.tts-input');
+          let correctCount = 0;
+          inputs.forEach(inp => {
+            const userAns = inp.value.trim().toUpperCase().replace(/\s/g, '');
+            const correctAns = inp.dataset.answer.toUpperCase().replace(/\s/g, '');
+            if (userAns === correctAns) {
+              correctCount++;
+              inp.style.background = '#b1e6b1';
+            } else {
+              inp.style.background = '#f4b8b8';
+            }
+            inp.disabled = true;
+          });
+          // skor: 10 per jawaban benar (max 100)
+          score += correctCount * 10;
+          const fb = document.getElementById('feedbackBox');
+          fb.textContent = `✅ Anda menjawab benar ${correctCount} dari ${inputs.length} istilah.`;
+          fb.classList.add('show');
+          document.getElementById('btnNext').textContent = 'LIHAT HASIL';
+          updateScoreAndProgress();
+          // ganti event
+          document.getElementById('btnNext').addEventListener('click', () => {
+            finishLevel();
+          }, { once: true });
+        }, { once: true });
+      }
+
+      // LEVEL 5
+      function renderLevel5() {
+        const qData = level5Questions[currentQuestionIndex];
+        levelBadge.textContent = `LEVEL 5 · HISTORY DETECTIVE`;
+        let html = `<div class="question-text">${qData.q}</div><div class="options-container" id="optionsContainer">`;
+        qData.options.forEach((opt, idx) => {
+          html += `<button class="option-btn" data-index="${idx}">${String.fromCharCode(65+idx)}. ${opt}</button>`;
+        });
+        html += `</div><div class="feedback-box" id="feedbackBox"></div>`;
+        html += `<button class="btn-next" id="btnNext" disabled>SOAL BERIKUTNYA</button>`;
+        dynamicQuizContent.innerHTML = html;
+
+        const optionBtns = document.querySelectorAll('.option-btn');
+        optionBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (answered) return;
+            answered = true;
+            const selectedIdx = parseInt(btn.dataset.index);
+            const isCorrect = selectedIdx === qData.correct;
+            if (isCorrect) { score += 20; btn.classList.add('correct'); }
+            else { btn.classList.add('wrong'); }
+            optionBtns[qData.correct].classList.add('correct');
+            optionBtns.forEach(b => b.disabled = true);
+            const fb = document.getElementById('feedbackBox');
+            fb.textContent = (isCorrect ? '✅ Benar! ' : '❌ Salah. ') + qData.explanation;
+            fb.classList.add('show');
+            document.getElementById('btnNext').disabled = false;
+            updateScoreAndProgress();
+          });
+        });
+        document.getElementById('btnNext').addEventListener('click', () => {
+          if (currentQuestionIndex < level5Questions.length - 1) {
+            currentQuestionIndex++;
+            answered = false;
+            renderQuestion();
+            updateScoreAndProgress();
+          } else finishLevel();
+        });
+      }
+
+      function finishLevel() {
+        quizPanel.style.display = 'none';
+        resultPanel.style.display = 'block';
+        const totalQ = (currentLevel === 1) ? level1Questions.length :
+                       (currentLevel === 2) ? level2Questions.length :
+                       (currentLevel === 3) ? level3Questions.length :
+                       (currentLevel === 4) ? 10 : level5Questions.length;
+        let maxScore = (currentLevel === 1) ? 150 :
+                       (currentLevel === 2) ? 100 :
+                       (currentLevel === 3) ? 150 :
+                       (currentLevel === 4) ? 100 : 100;
+        let percentage = Math.round((score / maxScore) * 100);
+        let predikat = percentage >= 80 ? 'SANGAT BAIK' : percentage >= 60 ? 'BAIK' : percentage >= 40 ? 'CUKUP' : 'PERLU BELAJAR LAGI';
+        let html = `<div class="result-stats">
+          <div class="stat-card"><div class="label">Total Skor</div><div class="value">${score}</div></div>
+          <div class="stat-card"><div class="label">Persentase</div><div class="value">${percentage}%</div></div>
+          <div class="stat-card"><div class="label">Predikat</div><div class="value" style="font-size:1.2rem;">${predikat}</div></div>
+        </div>`;
+        html += `<div class="predikat">${predikat}</div>`;
+        html += `<p style="margin-top:24px;font-size:1.1rem;">Terus semangat belajar untuk Asesmen Akhir Semester!</p>`;
+        document.getElementById('resultStats').innerHTML = html;
+      }
+
+      // ============== INIT ==============
+      function initLevelGrid() {
+        const levels = [
+          { id: 1, icon: '📜', name: 'Quick History', desc: '15 soal PG' },
+          { id: 2, icon: '✔️', name: 'True or False', desc: '10 soal' },
+          { id: 3, icon: '🔠', name: 'Multiple Answer', desc: '10 soal' },
+          { id: 4, icon: '🧩', name: 'Crossword', desc: '10 istilah' },
+          { id: 5, icon: '🔍', name: 'History Detective', desc: '5 soal HOTS' }
+        ];
+        levelGrid.innerHTML = levels.map(l => `
+          <div class="level-card" data-level="${l.id}">
+            <div class="icon">${l.icon}</div>
+            <div class="level-name">${l.name}</div>
+            <div class="level-desc">${l.desc}</div>
+          </div>
+        `).join('');
+        document.querySelectorAll('.level-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const lvl = parseInt(card.dataset.level);
+            startLevel(lvl);
+          });
+        });
+      }
+
+      btnMulai.addEventListener('click', showLevelSelect);
+      btnUlangi.addEventListener('click', () => {
+        showLevelSelect();
+        // reset tampilan
+        levelSelect.style.display = 'block';
+        hero.style.display = 'none';
+        resultPanel.style.display = 'none';
+      });
+
+      initLevelGrid();
+      // hero visible initially
+      hero.style.display = 'block';
+      levelSelect.style.display = 'none';
+      quizPanel.style.display = 'none';
+      resultPanel.style.display = 'none';
+    })();
+  </script>
+</body>
+</html>
